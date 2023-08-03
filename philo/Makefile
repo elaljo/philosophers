@@ -8,7 +8,6 @@ RM = rm -rf
 
 C_FILES = philo.c\
 					check_args.c\
-					helper_funcs.c\
 					init_funcs.c\
 					utils1.c\
 					

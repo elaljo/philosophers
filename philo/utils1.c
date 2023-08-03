@@ -6,33 +6,55 @@
 /*   By: moelalj <moelalj@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 19:17:08 by moelalj           #+#    #+#             */
-/*   Updated: 2023/08/01 19:17:10 by moelalj          ###   ########.fr       */
+/*   Updated: 2023/08/03 16:21:07 by moelalj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	eat_and_count_meals(t_info_philos *info_philos)
+void	eat_and_count_meals(t_info_ph *info_ph)
 {
-	printf("%04ld %d is "BLUE"eating\n"RESET, get_time() - info_philos->start_time,  info_philos->id);
-	info_philos->count_meals++;
+	printf("%04ld %d is "BLUE"eating\n"RESET, get_time() - info_ph->start_time, info_ph->id);
+	info_ph->count_meals++;
 }
 
-long	get_time()
+long	get_time(void)
 {
-	struct timeval tv;
+	struct timeval	tv;
+
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-void	ft_usleep(int time_to_sleep ,t_info_philos *info_philos)
+void	ft_usleep(int time_to_sleep, t_info_ph *info_ph)
 {
-	(void)info_philos;
-	long	start = get_time();
+	long	start;
+
+	(void)info_ph;
+	start = get_time();
 	while (1)
 	{
-		if(get_time() - start >= time_to_sleep)
+		if (get_time() - start >= time_to_sleep)
 			break ;
 		usleep(500);
 	}
+}
+
+int	eph_must_eat(t_info_ph *info_ph, t_info_ph *ph_member)
+{
+	int	count_eat;
+	int	count_philos;
+
+	count_eat = 0;
+	count_philos = 0;
+	if (info_ph->eph_must_eat)
+	{
+		while (count_philos < info_ph->num_ph)
+		{
+			if (ph_member[count_philos].count_meals == info_ph->eph_must_eat)
+				count_eat++;
+			count_philos++;
+		}
+	}
+	return (count_eat);
 }

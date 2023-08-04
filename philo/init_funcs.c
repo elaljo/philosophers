@@ -12,6 +12,19 @@
 
 #include "philo.h"
 
+void	init_philos_informations(t_info_ph *info, char **argv, int argc)
+{
+	info->start_time = get_time();
+	info->count_meals = 0;
+	info->num_ph = ft_atoi(argv[1]);
+	info->num_forks = ft_atoi(argv[1]);
+	info->t_die = ft_atoi(argv[2]);
+	info->t_eat = ft_atoi(argv[3]);
+	info->t_sleep = ft_atoi(argv[4]);
+	if (argc == 6)
+		info->eph_must_eat = ft_atoi(argv[5]);
+}
+
 void	init_threads(t_info_ph *info_ph, char *argv[], int argc)
 {
 	t_info_ph		ph_member[info_ph->num_ph];
@@ -25,7 +38,6 @@ void	init_threads(t_info_ph *info_ph, char *argv[], int argc)
 		pthread_mutex_init(&forks[i], NULL);
 		i++;
 	}
-	pthread_mutex_init(&info_ph->tm, NULL);
 	i = 0;
 	while (i < info_ph->num_ph)
 	{
@@ -35,7 +47,7 @@ void	init_threads(t_info_ph *info_ph, char *argv[], int argc)
 		ph_member[i].eat_time = get_time();
 		if (pthread_create(&thread[i], NULL, routine, &ph_member[i]) != 0)
 			return ;
-		usleep(50);
+		usleep(10);
 		i++;
 	}
 	i = 0;
@@ -47,7 +59,7 @@ void	init_threads(t_info_ph *info_ph, char *argv[], int argc)
 				ph_member[i].id);
 			break ;
 		}
-		if (eph_must_eat(info_ph, ph_member) == info_ph->num_ph)
+		if ((ph_member[i].count_meals >= info_ph->eph_must_eat * info_ph->num_ph) && info_ph->eph_must_eat)
 			break ;
 		i++;
 		if (i >= info_ph->num_ph)
@@ -55,18 +67,6 @@ void	init_threads(t_info_ph *info_ph, char *argv[], int argc)
 	}
 }
 
-void	init_philos_informations(t_info_ph *info, char **argv, int argc)
-{
-	info->start_time = get_time();
-	info->count_meals = 0;
-	info->num_ph = ft_atoi(argv[1]);
-	info->num_forks = ft_atoi(argv[1]);
-	info->t_die = ft_atoi(argv[2]);
-	info->t_eat = ft_atoi(argv[3]);
-	info->t_sleep = ft_atoi(argv[4]);
-	if (argc == 6)
-		info->eph_must_eat = ft_atoi(argv[5]);
-}
 
 void	init_members_of_threads(t_info_ph *ph_member, char *s[], int i, int argc)
 {

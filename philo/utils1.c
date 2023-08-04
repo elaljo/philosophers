@@ -14,8 +14,12 @@
 
 void	eat_and_count_meals(t_info_ph *info_ph)
 {
+	static int	meals;
+
 	printf("%04ld %d is "BLUE"eating\n"RESET, get_time() - info_ph->start_time, info_ph->id);
-	info_ph->count_meals++;
+	meals++;
+	info_ph->count_meals = meals; 
+	ft_usleep(info_ph->t_eat);
 }
 
 long	get_time(void)
@@ -26,11 +30,10 @@ long	get_time(void)
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-void	ft_usleep(int time_to_sleep, t_info_ph *info_ph)
+void	ft_usleep(int time_to_sleep)
 {
 	long	start;
 
-	(void)info_ph;
 	start = get_time();
 	while (1)
 	{
@@ -40,21 +43,21 @@ void	ft_usleep(int time_to_sleep, t_info_ph *info_ph)
 	}
 }
 
-int	eph_must_eat(t_info_ph *info_ph, t_info_ph *ph_member)
-{
-	int	count_eat;
-	int	count_philos;
+//int	eph_must_eat(t_info_ph *info_ph, t_info_ph *ph_member)
+//{
+//	int	count_eat;
+//	int	count_philos;
 
-	count_eat = 0;
-	count_philos = 0;
-	if (info_ph->eph_must_eat)
-	{
-		while (count_philos < info_ph->num_ph)
-		{
-			if (ph_member[count_philos].count_meals == info_ph->eph_must_eat)
-				count_eat++;
-			count_philos++;
-		}
-	}
-	return (count_eat);
-}
+//	count_eat = 0;
+//	count_philos = 0;
+//	if (info_ph->eph_must_eat)
+//	{
+//		while (count_philos < info_ph->num_ph)
+//		{
+//			if (ph_member[count_philos].count_meals == info_ph->eph_must_eat)
+//				count_eat++;
+//			count_philos++;
+//		}
+//	}
+//	return (count_eat);
+//}

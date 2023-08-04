@@ -26,15 +26,12 @@ void	*routine(void *info)
 		printf("%04ld %d has taken a "CYAN"fork\n"RESET, get_time() - info_ph->start_time, info_ph->id);
 		pthread_mutex_lock(info_ph->rightfork);
 		printf("%04ld %d has taken a "CYAN"fork\n"RESET, get_time() - info_ph->start_time, info_ph->id);
-		eat_and_count_meals(info_ph);
-		pthread_mutex_lock(&info_ph->tm);
 		info_ph->eat_time = get_time();
-		pthread_mutex_lock(&info_ph->tm);
-		ft_usleep(info_ph->t_eat, info_ph);
+		eat_and_count_meals(info_ph);
 		pthread_mutex_unlock(info_ph->leftfork);
 		pthread_mutex_unlock(info_ph->rightfork);
 		printf("%04ld %d is "YELLOW"sleeping\n"RESET, get_time() - info_ph->start_time, info_ph->id);
-		ft_usleep(info_ph->t_sleep, info_ph);
+		ft_usleep(info_ph->t_sleep);
 	}
 	return (NULL);
 }
@@ -49,6 +46,8 @@ int	main(int argc, char *argv[])
 			return (1);
 		init_philos_informations(&info_ph, argv, argc);
 		init_threads(&info_ph, argv, argc);
+		//pthread_mutex_destroy(info_ph.leftfork);
+		//pthread_mutex_destroy(info_ph.rightfork);
 		return (0);
 	}
 	print_err_args();

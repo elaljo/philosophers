@@ -31,8 +31,6 @@ typedef struct s_info_ph
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*leftfork;
 	pthread_mutex_t	*rightfork;
-	pthread_mutex_t	*print;
-	pthread_mutex_t	tm;
 	int				id;
 	int				num_ph;
 	int				num_forks;
@@ -52,8 +50,8 @@ void	init_philos_informations(t_info_ph *info, char **argv, int argc);
 void	init_threads(t_info_ph *info_ph, char *argv[], int argc);
 void	init_members_of_threads(t_info_ph *ph_member, char *s[], int i, int argc);
 void	eat_and_count_meals(t_info_ph *info_ph);
-void	ft_usleep(int time_to_sleep, t_info_ph *info_ph);
-int		eph_must_eat(t_info_ph *info_ph, t_info_ph *ph_member);
+void	ft_usleep(int time_to_sleep);
+//int		eph_must_eat(t_info_ph *info_ph, t_info_ph *ph_member);
 int		ft_atoi(char *s);
 int		if_valid(char **s);
 

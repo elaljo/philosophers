@@ -23,8 +23,8 @@ int	if_valid(char **s)
 		j = 0;
 		while (s[i][j])
 		{
-			if ((s[i][j] >= '0' && s[i][j] <= '9') && ft_atoi(s[3]) >= 60
-					&& ft_atoi(s[4]) >= 60)
+			if (((s[i][j] >= '0' && s[i][j] <= '9') && ft_atoi(s[3]) >= 60 &&
+			ft_atoi(s[4]) >= 60) && ft_atoi(s[1]) <= 250)
 				j++;
 			else
 			{
@@ -42,7 +42,8 @@ void	print_err_args(void)
 	printf(RED"WRONG INPUT"RESET" -- Numbers of arguments is not enough\n");
 	printf(GREEN"  					! REMINDER OF ENOUGH ARGUMENTS !\n"RESET);
 	printf("[number_of_philosophers] - [time_to_die] - [time_to_eat]");
-	printf(" - [time_to_sleep] - [number_of_times_each_philosopher_eph_must_eat]");
+	printf(" - [time_to_sleep] - ");
+	printf("[number_of_times_each_philosopher_eph_must_eat]");
 	printf("(Optional argument)\n");
 }
 

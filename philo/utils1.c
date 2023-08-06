@@ -16,9 +16,9 @@ void	eat_and_count_meals(t_info_ph *info_ph)
 {
 	static int	meals;
 
-	printf("%04ld %d is "BLUE"eating\n"R, get_time() - info_ph->start_time, info_ph->id);
+	printf("%04ld %d is "BLUE"eating\n"R, r_time(info_ph), info_ph->id);
 	meals++;
-	info_ph->count_meals = meals; 
+	info_ph->count_meals = meals;
 	ft_usleep(info_ph->t_eat);
 }
 
@@ -41,4 +41,9 @@ void	ft_usleep(int time_to_sleep)
 			break ;
 		usleep(200);
 	}
+}
+
+long	r_time(t_info_ph *info_ph)
+{
+	return (get_time() - info_ph->start_time);
 }

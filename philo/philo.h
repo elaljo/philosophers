@@ -17,7 +17,7 @@
 # define GREEN   "\x1B[32m"
 # define YELLOW  "\x1B[33m"
 # define BLUE    "\x1B[34m"
-# define CYAN    "\x1B[36m"
+# define C    "\x1B[36m"
 # define R   "\x1B[0m"
 
 # include <sys/time.h>
@@ -48,10 +48,16 @@ void	print_err_args(void);
 void	*routine(void *info);
 void	init_philos_informations(t_info_ph *info, char **argv, int argc);
 void	init_threads(t_info_ph *info_ph, char *argv[], int argc);
-void	init_members_of_threads(t_info_ph *ph_member, char *s[], int i, int argc);
+void	init_members_of_threads(t_info_ph *ph_member, char *s[],
+			int i, int argc);
+void	give_forks_time_mem(t_info_ph *info_ph, t_info_ph *ph_member,
+			int i, pthread_mutex_t *forks);
+void	main_thread_check(t_info_ph *info_ph, t_info_ph *ph_member);
+void	init_mutexes(t_info_ph *info_ph, pthread_mutex_t *forks);
 void	eat_and_count_meals(t_info_ph *info_ph);
 void	ft_usleep(int time_to_sleep);
 int		ft_atoi(char *s);
 int		if_valid(char **s);
+long	r_time(t_info_ph *info_ph);
 
 #endif

@@ -27,9 +27,9 @@ void	init_philos_informations(t_info_ph *info, char **argv, int argc)
 
 void	init_threads(t_info_ph *info_ph, char *argv[], int argc)
 {
-	t_info_ph		ph_member[info_ph->num_ph];
-	pthread_t		thread[info_ph->num_ph];
-	pthread_mutex_t	forks[info_ph->num_forks];
+	t_info_ph		ph_member[250];
+	pthread_t		thread[250];
+	pthread_mutex_t	forks[250];
 	int				i;
 
 	i = 0;
@@ -55,11 +55,11 @@ void	init_threads(t_info_ph *info_ph, char *argv[], int argc)
 	{
 		if (get_time() - ph_member[i].eat_time >= info_ph->t_die)
 		{	
-			printf("%04ld %d"RED" died\n"RESET, get_time() - info_ph->start_time,
+			printf("%04ld %d"RED" died\n"R, get_time() - info_ph->start_time,
 				ph_member[i].id);
 			break ;
 		}
-		if ((ph_member[i].count_meals >= info_ph->eph_must_eat * info_ph->num_ph) && info_ph->eph_must_eat)
+		if ((ph_member[i].count_meals > (info_ph->eph_must_eat * info_ph->num_ph)) && info_ph->eph_must_eat)
 			break ;
 		i++;
 		if (i >= info_ph->num_ph)

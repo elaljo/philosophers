@@ -16,7 +16,7 @@ void	eat_and_count_meals(t_info_ph *info_ph)
 {
 	static int	meals;
 
-	printf("%04ld %d is "BLUE"eating\n"RESET, get_time() - info_ph->start_time, info_ph->id);
+	printf("%04ld %d is "BLUE"eating\n"R, get_time() - info_ph->start_time, info_ph->id);
 	meals++;
 	info_ph->count_meals = meals; 
 	ft_usleep(info_ph->t_eat);
@@ -39,25 +39,6 @@ void	ft_usleep(int time_to_sleep)
 	{
 		if (get_time() - start >= time_to_sleep)
 			break ;
-		usleep(500);
+		usleep(200);
 	}
 }
-
-//int	eph_must_eat(t_info_ph *info_ph, t_info_ph *ph_member)
-//{
-//	int	count_eat;
-//	int	count_philos;
-
-//	count_eat = 0;
-//	count_philos = 0;
-//	if (info_ph->eph_must_eat)
-//	{
-//		while (count_philos < info_ph->num_ph)
-//		{
-//			if (ph_member[count_philos].count_meals == info_ph->eph_must_eat)
-//				count_eat++;
-//			count_philos++;
-//		}
-//	}
-//	return (count_eat);
-//}

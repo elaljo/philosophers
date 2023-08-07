@@ -16,10 +16,19 @@ void	eat_and_count_meals(t_info_ph *info_ph)
 {
 	static int	meals;
 
-	printf("%04ld %d is "BLUE"eating\n"R, r_time(info_ph), info_ph->id);
+	print(info_ph, "is eating");
+	pthread_mutex_lock(info_ph->time);
 	meals++;
 	info_ph->count_meals = meals;
+	pthread_mutex_unlock(info_ph->time);
 	ft_usleep(info_ph->t_eat);
+}
+
+void	print(t_info_ph *info_ph, char *msg)
+{
+	pthread_mutex_lock(info_ph->print);
+	printf("%04ld %d %s\n", r_time(info_ph), info_ph->id, msg);
+	pthread_mutex_unlock(info_ph->print);
 }
 
 long	get_time(void)

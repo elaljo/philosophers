@@ -23,53 +23,74 @@ void	init_threads(t_info_ph *info_ph, char *argv[], int argc)
 	i = 0;
 	while (i < info_ph->num_ph)
 	{
+		ph_member[i].print = info_ph->print;
+		ph_member[i].time = info_ph->time;
 		init_members_of_threads(ph_member, argv, i, argc);
 		give_forks_time_mem(info_ph, ph_member, i, forks);
 		if (pthread_create(&thread[i], NULL, routine, &ph_member[i]) != 0)
+		{
+			dest_free(info_ph, forks);
 			return ;
-		usleep(5);
+		}
+		usleep(10);
 		i++;
 	}
-	main_thread_check(info_ph, ph_member);
+	main_thread_check(info_ph, ph_member, forks);
 }
 
-void	main_thread_check(t_info_ph *info_ph, t_info_ph *ph_member)
+void	main_thread_check(t_info_ph *info_ph, t_info_ph *ph_member,
+	pthread_mutex_t *forks)
 {
 	int	i;
 
 	i = 0;
 	while (1)
 	{
+		pthread_mutex_lock(info_ph->time);
 		if (get_time() - ph_member[i].eat_time >= info_ph->t_die)
-		{	
+		{
+			pthread_mutex_lock(info_ph->print);
 			printf("%04ld %d"RED" died\n"R, r_time(info_ph), ph_member[i].id);
+			pthread_mutex_unlock(info_ph->time);
+			dest_free(info_ph, forks);
 			break ;
 		}
-		if (info_ph->eph_must_eat)
-			if (ph_member[i].count_meals
-				> info_ph->eph_must_eat * info_ph->num_ph + 1)
-				break ;
+		if (ph_member[i].count_meals > info_ph->eph_must_eat * info_ph->num_ph
+			+ 1 && info_ph->eph_must_eat)
+		{
+			pthread_mutex_unlock(info_ph->time);
+			dest_free(info_ph, forks);
+			break ;
+		}
+		pthread_mutex_unlock(info_ph->time);
 	}
 }
 
-void	init_mutexes(t_info_ph *info_ph, pthread_mutex_t *forks)
+int	init_mutexes(t_info_ph *info_ph, pthread_mutex_t *forks)
 {
 	int	i;
 
+	info_ph->time = malloc(sizeof(pthread_mutex_t));
+	if (pthread_mutex_init(info_ph->time, NULL) != 0)
+		return (free(info_ph->time), -1);
+	info_ph->print = malloc(sizeof(pthread_mutex_t));
+	if (pthread_mutex_init(info_ph->print, NULL) != 0)
+	{
+		pthread_mutex_destroy(info_ph->time);
+		return (free(info_ph->time), free(info_ph->print), -1);
+	}
 	i = 0;
 	while (i < info_ph->num_forks)
 	{
-		pthread_mutex_init(&forks[i], NULL);
+		if (pthread_mutex_init(&forks[i], NULL) != 0)
+		{
+			pthread_mutex_destroy(info_ph->time);
+			pthread_mutex_destroy(info_ph->print);
+			return (free(info_ph->time), free(info_ph->print), -1);
+		}
 		i++;
 	}
-}
-
-void	give_forks_time_mem(t_info_ph *info_ph, t_info_ph *ph_member,
-	int i, pthread_mutex_t *forks)
-{
-		ph_member[i].leftfork = &forks[i];
-		ph_member[i].rightfork = &forks[(i + 1) % info_ph->num_ph];
-		ph_member[i].eat_time = get_time();
+	return (0);
 }
 
 void	init_members_of_threads(t_info_ph *ph_member, char *s[],
@@ -85,4 +106,12 @@ void	init_members_of_threads(t_info_ph *ph_member, char *s[],
 	ph_member[i].t_sleep = ft_atoi(s[4]);
 	if (argc == 6)
 		ph_member[i].eph_must_eat = ft_atoi(s[5]);
+}
+
+void	give_forks_time_mem(t_info_ph *info_ph, t_info_ph *ph_member,
+	int i, pthread_mutex_t *forks)
+{
+		ph_member[i].leftfork = &forks[i];
+		ph_member[i].rightfork = &forks[(i + 1) % info_ph->num_ph];
+		ph_member[i].eat_time = get_time();
 }

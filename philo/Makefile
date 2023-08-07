@@ -2,15 +2,15 @@ NAME = philo
 
 CC = cc
 
-#CFLAGS = -Wall -Werror -Wextra -pthread
-CFLAGS = -Wall -Werror -Wextra -pthread -fsanitize=thread
+CFLAGS = -Wall -Werror -Wextra -pthread
+#CFLAGS = -Wall -Werror -Wextra -pthread -fsanitize=thread
 
 RM = rm -rf
 
 C_FILES = philo.c\
 					check_args.c\
 					init_funcs.c\
-					utils1.c\
+					utils1.c
 					
 
 OBJ = ${C_FILES:.c=.o}

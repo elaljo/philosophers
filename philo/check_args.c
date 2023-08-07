@@ -39,8 +39,8 @@ int	if_valid(char **s)
 
 void	print_err_args(void)
 {
-	printf(RED"WRONG INPUT"R" -- Numbers of arguments is not enough\n");
-	printf(GREEN"  					! REMINDER OF ENOUGH ARGUMENTS !\n"R);
+	printf("WRONG INPUT -- Numbers of arguments is not enough\n");
+	printf("  					! REMINDER OF ENOUGH ARGUMENTS !\n");
 	printf("[number_of_philosophers] - [time_to_die] - [time_to_eat]");
 	printf(" - [time_to_sleep] - ");
 	printf("[number_of_times_each_philosopher_eph_must_eat]");

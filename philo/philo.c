@@ -12,6 +12,22 @@
 
 #include "philo.h"
 
+void	dest_free(t_info_ph *info_ph, pthread_mutex_t *forks)
+{
+	int	i;
+
+	i = 0;
+	while (i < info_ph->num_forks)
+	{
+		pthread_mutex_destroy(&forks[i]);
+		i++;
+	}
+	pthread_mutex_destroy(info_ph->time);
+	pthread_mutex_destroy(info_ph->print);
+	free(info_ph->time);
+	free(info_ph->print);
+}
+
 void	init_philos_informations(t_info_ph *info, char **argv, int argc)
 {
 	info->start_time = get_time();
@@ -31,19 +47,21 @@ void	*routine(void *info)
 
 	info_ph = (t_info_ph *)info;
 	if (info_ph->id % 2)
-		usleep(100);
+		usleep(500);
 	while (1)
 	{
-		printf("%04ld %d is "GREEN"thinking\n"R, r_time(info_ph), info_ph->id);
+		print(info_ph, "is thinking");
 		pthread_mutex_lock(info_ph->leftfork);
-		printf("%04ld %d has taken a "C"fork\n"R, r_time(info_ph), info_ph->id);
+		print(info_ph, "has taken a fork");
 		pthread_mutex_lock(info_ph->rightfork);
-		printf("%04ld %d has taken a "C"fork\n"R, r_time(info_ph), info_ph->id);
+		print(info_ph, "has taken a fork");
+		pthread_mutex_lock(info_ph->time);
 		info_ph->eat_time = get_time();
+		pthread_mutex_unlock(info_ph->time);
 		eat_and_count_meals(info_ph);
 		pthread_mutex_unlock(info_ph->leftfork);
 		pthread_mutex_unlock(info_ph->rightfork);
-		printf("%04ld %d is "YELLOW"sleeping\n"R, r_time(info_ph), info_ph->id);
+		print(info_ph, "is sleeping");
 		ft_usleep(info_ph->t_sleep);
 	}
 	return (NULL);
